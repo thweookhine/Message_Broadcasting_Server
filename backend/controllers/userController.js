@@ -95,7 +95,8 @@ const logoutUser = async (req,res) => {
 
 const getAllActiveUsers = async (req,res) => {
     try {
-        const activeUsers = await User.findAll();
+        console.log('active users')
+        const activeUsers = await User.findAll({where: {isActive: true}});
         return res.status(200).json({activeUsers})
     } catch(err) {
         return res.status(500).json({error: err.message})

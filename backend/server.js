@@ -21,7 +21,6 @@ sequelize.sync({force: false})
         .catch(err => console.error('Error syncing database:', err));
 // Initialize WebSocket server
 setupWebSocket(server);
-console.log('setup')
 
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 

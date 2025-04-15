@@ -11,7 +11,7 @@ const { getUserProfile } = require('../controllers/userController');
 userRouter.post('/registerUser', validateUserRegister,registerUser)
 userRouter.post('/loginUser', validateUserLogin, loginUser)
 userRouter.get('/logout', authenticateUser, logoutUser)
-userRouter.get('/:id', authenticateUser, getUserProfile)
 userRouter.get('/activeUsers', authenticateUser, getAllActiveUsers)
+userRouter.get('/:id', authenticateUser, getUserProfile)
 
 module.exports = userRouter

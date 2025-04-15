@@ -5,6 +5,16 @@ const Message  = require("../models/Message");
 
 const SECRET_KEY = "your_secret_key";
 
+// Helper: broadcast to all connected clients
+function broadcast(wss, data) {
+    // Broadcast message to all clients
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(data));
+        }
+    });
+}
+
 function setupWebSocket(server) {
     const wss = new WebSocketServer({ server});
 
@@ -28,6 +38,12 @@ function setupWebSocket(server) {
         }
 
         console.log(`User ${user.name} connected`);
+        broadcast(wss, { 
+            type: 'user-connected',
+            data: {
+                name: user.name
+            }
+        })
 
         ws.on("message", async (messageData) => {
             const data = JSON.parse(messageData);
@@ -39,20 +55,23 @@ function setupWebSocket(server) {
 
             await newMessage.save();
 
-            // Broadcast message to all clients
-            wss.clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({ 
-                        sender: data.sender, 
-                        content: data.content 
-                    }));
-                    console.log('sent msg')
+            broadcast(wss, { 
+                type: 'message',
+                data: {
+                    sender: data.sender, 
+                    content: data.content 
                 }
-            });
+            })
         });
 
         ws.on("close", () => {
-            console.log(`User ${user.username} disconnected`);
+            console.log(`User ${user.name} disconnected`);
+            broadcast(wss, { 
+                type: 'user-disconnected',
+                data: {
+                    name: user.name
+                }
+            })
         });
     });
 
