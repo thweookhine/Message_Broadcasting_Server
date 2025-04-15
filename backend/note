@@ -1,0 +1,4 @@
+✅ Approach 2: Using res.status().json() (Better for Middleware)
+
+client-secret => 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
+client-id => 222044634497-da6clqd7umuql0s326qoi2ge2s6dvhg1.apps.googleusercontent.com

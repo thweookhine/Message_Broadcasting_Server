@@ -1,0 +1,18 @@
+const WebSocket = require("ws");
+
+const token = "YOUR_JWT_TOKEN"; // Get from login API
+
+const ws = new WebSocket(`ws://localhost:3000?token=${token}`);
+
+ws.on("open", () => {
+  console.log("Connected to server");
+  ws.send("Hello Admin");
+});
+
+ws.on("message", (data) => {
+  console.log("Message from server:", data);
+});
+
+ws.on("close", () => {
+  console.log("Disconnected");
+});
